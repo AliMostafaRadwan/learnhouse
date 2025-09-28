@@ -136,3 +136,21 @@ export async function toggleScheduleLock(
   const res = await errorHandling(result)
   return res.data
 }
+
+export interface AvailableCourseOffering {
+  course_offering: CourseOffering
+  course: Course
+  available_time_slots: TimeSlot[]
+}
+
+export async function getAvailableCourseOfferings(
+  orgId: number,
+  access_token: string
+): Promise<AvailableCourseOffering[]> {
+  const result = await fetch(
+    `${getAPIUrl()}courses/org/${orgId}/available`,
+    RequestBodyWithAuthHeader('GET', null, null, access_token)
+  )
+  const res = await errorHandling(result)
+  return res.data
+}
