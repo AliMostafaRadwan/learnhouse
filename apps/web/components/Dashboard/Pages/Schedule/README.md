@@ -1,133 +1,102 @@
-# ScheduleBuilder Component
+# Schedule Builder with Drag-and-Drop
 
-A React component for managing weekly course schedules with a visual grid interface similar to the Ibn al-Haytham system.
+This implementation integrates @dnd-kit for modern drag-and-drop functionality in the ScheduleBuilder component.
 
 ## Features
 
-### Visual Schedule Grid
-- **Weekly Layout**: Days of the week (Sunday to Saturday) as rows
-- **Time Intervals**: 55-minute time slots from 8:30 AM to 4:45 PM as columns
-- **Responsive Design**: Horizontal scroll for mobile devices
-- **Grid System**: CSS Grid-based layout for precise positioning
+### 1. **Draggable Course Blocks**
+- Existing scheduled courses can be dragged around the schedule grid
+- Visual feedback during dragging with hover states and shadows
+- Preserves course information during drag operations
 
-### Course Block Rendering
-- **Dynamic Width**: Course blocks span multiple columns based on duration
-- **Color Coding**: Different background colors for course types:
-  - Blue: Lectures
-  - Green: Sections
-  - Purple: Labs
-  - Orange: Tutorials
-  - Pink: Seminars
-- **Rich Information**: Displays course name, type, location, and time
-- **Hover Effects**: Interactive blocks with shadow transitions
+### 2. **Sidebar with Available Courses**
+- Shows unscheduled course offerings that can be dragged onto the schedule
+- Each course card displays:
+  - Course name and type
+  - Instructor name
+  - Location
+  - Available time slots
+- Color-coded by course type (Lecture, Lab, Seminar, etc.)
 
-### Data Integration
-- **API Integration**: Fetches schedule data from `/api/v1/schedules/{userId}`
-- **Real-time Updates**: Uses SWR for data fetching and caching
-- **Error Handling**: Comprehensive error states and loading indicators
-- **Type Safety**: Full TypeScript support with proper interfaces
+### 3. **Droppable Grid Cells**
+- Each time slot in the schedule grid accepts dropped courses
+- Visual indicators when hovering over valid drop zones
+- Shows "Drop here" message for empty slots
+- Shows "Slot occupied" warning for filled slots
 
-### Schedule Management
-- **Lock/Unlock**: Toggle schedule modification permissions
-- **Course Summary**: Detailed view of all scheduled courses
-- **Empty State**: User-friendly message when no courses are scheduled
-- **Legend**: Visual guide for course type colors
+### 4. **Real-time Visual Feedback**
+- Drag overlay shows course information during dragging
+- Drop zones highlight with blue border for valid drops
+- Red highlighting for occupied slots
+- Smooth animations and transitions
 
-## Component Structure
+### 5. **API Integration**
+- Connects to existing scheduling API endpoints:
+  - `addCourseToSchedule` - Adds new courses from sidebar
+  - `removeCourseFromSchedule` - Removes courses when moved
+  - `getAvailableCourseOfferings` - Fetches available courses (mock data currently)
 
-### Main Components
-1. **ScheduleBuilder**: Main container component
-2. **ScheduleGrid**: Grid layout with time slots and days
-3. **ScheduleBlock**: Individual course block component
+### 6. **Accessibility**
+- Keyboard navigation support
+- Screen reader friendly
+- Proper ARIA attributes
 
-### Key Functions
-- `getTimeSlotIndex()`: Maps time strings to grid column indices
-- `getColumnSpan()`: Calculates block width based on course duration
-- `handleToggleLock()`: Manages schedule lock status
+## Components
 
-## API Integration
+### `ScheduleBuilder.tsx`
+Main component that orchestrates the drag-and-drop functionality:
+- Manages DndContext for drag operations
+- Handles drag start, drag over, and drag end events
+- Integrates with existing schedule management
+- Shows/hides sidebar based on schedule lock status
 
-### Data Flow
-1. Component mounts and fetches user schedule via SWR
-2. Schedule data is transformed into grid coordinates
-3. Course blocks are rendered in appropriate grid positions
-4. Real-time updates through SWR mutation
+### `CoursesSidebar.tsx`
+Sidebar component displaying available courses:
+- Lists draggable course offerings
+- Shows course details and available time slots
+- Color-coded course type indicators
+- Loading states and empty states
 
-### Error Handling
-- Loading states with skeleton UI
-- Error messages for API failures
-- Graceful degradation for missing data
+### `DroppableCell`
+Individual grid cell component that accepts drops:
+- Handles drop zone highlighting
+- Shows visual feedback during drag operations
+- Manages occupied/empty state display
 
-## Styling
-
-### Design System
-- Uses existing Learn House UI components (Button, Badge, Table)
-- Consistent with project's Tailwind CSS configuration
-- Responsive breakpoints for mobile/desktop
-- Accessible color contrasts and hover states
-
-### Grid Layout
-- CSS Grid with 8 columns (1 for day labels, 7 for time slots)
-- Dynamic row heights based on content
-- Proper spacing and borders for visual clarity
+### `DraggableScheduleBlock`
+Enhanced version of existing schedule blocks:
+- Makes scheduled courses draggable
+- Maintains visual consistency with original design
+- Provides drag handles and hover states
 
 ## Usage
 
 ```tsx
-import ScheduleBuilder from '@components/Dashboard/Pages/Schedule/ScheduleBuilder'
+import ScheduleBuilder from './ScheduleBuilder'
 
-function SchedulePage() {
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <ScheduleBuilder />
-    </div>
-  )
-}
+// The component automatically handles all drag-and-drop functionality
+<ScheduleBuilder />
 ```
-
-## Navigation
-
-The ScheduleBuilder is accessible via:
-- Dashboard navigation menu (Calendar icon)
-- Direct route: `/orgs/[orgslug]/schedule`
-- Requires authentication and organization context
-
-## Future Enhancements
-
-### Planned Features
-- **Drag & Drop**: Move courses between time slots
-- **Course Addition**: Add new courses to schedule
-- **Conflict Detection**: Visual warnings for time conflicts
-- **Export**: Download schedule as PDF/image
-- **Print View**: Optimized layout for printing
-
-### Technical Improvements
-- **Performance**: Virtual scrolling for large schedules
-- **Accessibility**: Screen reader support and keyboard navigation
-- **Mobile**: Touch-friendly interactions
-- **Offline**: PWA support with offline capabilities
 
 ## Dependencies
 
-### Core
-- React 18+ with hooks
-- Next.js 13+ with app router
-- TypeScript for type safety
+- `@dnd-kit/core` - Core drag-and-drop functionality
+- `@dnd-kit/sortable` - Sortable interactions
+- `@dnd-kit/utilities` - Helper utilities
+- `@dnd-kit/modifiers` - Movement restrictions
 
-### UI Libraries
-- Tailwind CSS for styling
-- Radix UI components
-- Lucide React for icons
-- SWR for data fetching
+## Future Enhancements
 
-### State Management
-- React Context for user/organization data
-- SWR for server state management
-- React hooks for local state
+1. **Real API Integration**: Replace mock data with actual course offerings endpoint
+2. **Time Conflict Detection**: Prevent scheduling conflicts automatically
+3. **Bulk Operations**: Select and move multiple courses at once
+4. **Schedule Templates**: Save and load schedule templates
+5. **Export Functionality**: Export schedules to calendar formats
+6. **Mobile Optimization**: Improve touch interactions for mobile devices
 
-## Browser Support
+## Notes
 
-- Modern browsers (Chrome, Firefox, Safari, Edge)
-- Mobile responsive design
-- Touch device support
-- Progressive enhancement approach
+- The schedule sidebar is hidden when the schedule is locked
+- Mock data is currently used for available courses - replace `getAvailableCourseOfferings` with real API when available
+- Visual feedback includes rotation and opacity changes during dragging
+- All drag operations integrate with existing SWR cache invalidation
