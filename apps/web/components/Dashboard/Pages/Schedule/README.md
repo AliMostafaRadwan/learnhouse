@@ -92,14 +92,44 @@ The ScheduleBuilder is accessible via:
 - Direct route: `/orgs/[orgslug]/schedule`
 - Requires authentication and organization context
 
+## Drag & Drop Features (IMPLEMENTED)
+
+### Core Functionality
+- **@dnd-kit Integration**: Modern drag and drop using @dnd-kit/core and @dnd-kit/sortable
+- **Draggable Course Blocks**: Existing scheduled courses can be dragged within the grid
+- **Available Courses Sidebar**: Displays unscheduled courses that can be dragged onto the schedule
+- **Visual Drop Zones**: Time slots highlight when valid drop targets
+- **Real-time API Integration**: Changes are automatically saved to the backend
+
+### Drag & Drop Capabilities
+- **Add Courses**: Drag from Available Courses sidebar to empty time slots
+- **Move Courses**: Drag existing courses to different time slots (basic implementation)
+- **Visual Feedback**: Drag overlays and drop zone highlighting
+- **Conflict Prevention**: Validates time slot availability before allowing drops
+- **Touch Support**: Works on mobile and tablet devices
+
+### Available Courses Sidebar
+- **Course Filtering**: Automatically filters out already scheduled courses
+- **Course Information**: Shows course name, type, lecturer, location, and available times
+- **Color Coding**: Matches schedule grid color scheme for course types
+- **Responsive Layout**: Sidebar adapts to screen size
+
+### Technical Implementation
+- **DndContext**: Wraps the entire schedule component
+- **Draggable Blocks**: Schedule blocks and course cards are draggable
+- **Droppable Zones**: Time slots accept course drops
+- **State Management**: Manages drag state and updates schedule
+- **API Integration**: Calls addCourseToSchedule and removeCourseFromSchedule
+
 ## Future Enhancements
 
-### Planned Features
-- **Drag & Drop**: Move courses between time slots
-- **Course Addition**: Add new courses to schedule
-- **Conflict Detection**: Visual warnings for time conflicts
+### Additional Features
+- **Advanced Course Moving**: Direct time slot to time slot course movement
+- **Batch Operations**: Select and move multiple courses at once
+- **Undo/Redo**: Action history for schedule changes
 - **Export**: Download schedule as PDF/image
 - **Print View**: Optimized layout for printing
+- **Smart Scheduling**: AI-powered schedule optimization
 
 ### Technical Improvements
 - **Performance**: Virtual scrolling for large schedules
