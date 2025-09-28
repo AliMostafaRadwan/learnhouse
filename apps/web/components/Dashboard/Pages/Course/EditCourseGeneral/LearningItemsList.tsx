@@ -54,48 +54,60 @@ const LearningItemsList = ({ value, onChange, error }: LearningItemsListProps) =
     }, 0);
   };
 
-  // Parse the JSON string to items array when the component mounts or value changes
+  // Initialize with empty item on mount if needed
   useEffect(() => {
-    try {
-      if (value) {
+    if (!initializedRef.current && !value) {
+      const newItem: LearningItem = {
+        id: Date.now().toString(),
+        text: '',
+        emoji: '📝',
+      };
+      setItems([newItem]);
+      initializedRef.current = true;
+      onChange(JSON.stringify([newItem]));
+    }
+  }, []); // Only run on mount
+
+  // Parse the JSON string to items array when value changes
+  useEffect(() => {
+    if (value && !initializedRef.current) {
+      try {
         const parsedItems = JSON.parse(value);
         if (Array.isArray(parsedItems)) {
           setItems(parsedItems);
           initializedRef.current = true;
-        } else if (!initializedRef.current) {
-          // Initialize with one empty item if no valid array and not already initialized
+        } else {
+          // Invalid data, initialize with empty item
           const newItem: LearningItem = {
             id: Date.now().toString(),
             text: '',
             emoji: '📝',
           };
           setItems([newItem]);
-          onChange(JSON.stringify([newItem]));
           initializedRef.current = true;
+          onChange(JSON.stringify([newItem]));
         }
-      } else if (!initializedRef.current) {
-        // Initialize with one empty item if no value and not already initialized
+      } catch (e) {
+        console.error('Error parsing learning items:', e);
+        // Initialize with one empty item on error
         const newItem: LearningItem = {
           id: Date.now().toString(),
           text: '',
           emoji: '📝',
         };
         setItems([newItem]);
-        onChange(JSON.stringify([newItem]));
         initializedRef.current = true;
+        onChange(JSON.stringify([newItem]));
       }
-    } catch (e) {
-      console.error('Error parsing learning items:', e);
-      // Initialize with one empty item on error if not already initialized
-      if (!initializedRef.current) {
-        const newItem: LearningItem = {
-          id: Date.now().toString(),
-          text: '',
-          emoji: '📝',
-        };
-        setItems([newItem]);
-        onChange(JSON.stringify([newItem]));
-        initializedRef.current = true;
+    } else if (value && initializedRef.current) {
+      // Update items when value changes from parent (but don't call onChange to avoid loop)
+      try {
+        const parsedItems = JSON.parse(value);
+        if (Array.isArray(parsedItems)) {
+          setItems(parsedItems);
+        }
+      } catch (e) {
+        console.error('Error parsing learning items:', e);
       }
     }
   }, [value]);
@@ -129,7 +141,7 @@ const LearningItemsList = ({ value, onChange, error }: LearningItemsListProps) =
         }
       }
     }
-  }, [items, focusedItemId, showLinkInput]);
+  }, [focusedItemId, showLinkInput]);
 
   // Handle clicks outside of emoji picker and link input
   useEffect(() => {

@@ -254,7 +254,11 @@ function LandingCustom({ landing, orgslug }: LandingCustomProps) {
 
   return (
     <div className="flex flex-col items-center justify-between w-full max-w-(--breakpoint-2xl) mx-auto px-4 sm:px-6 lg:px-16 h-full">
-      {landing.sections.map((section) => renderSection(section))}
+      {landing.sections.map((section, index) => (
+        <div key={section.id || `section-${index}`}>
+          {renderSection(section)}
+        </div>
+      ))}
     </div>
   )
 }

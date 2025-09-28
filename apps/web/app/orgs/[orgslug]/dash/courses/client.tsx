@@ -65,11 +65,7 @@ function CoursesHome(params: CourseProps) {
               }
               dialogTitle="Create Course"
               dialogDescription="Create a new course"
-              dialogTrigger={
-                <button>
-                  <NewCourseButton />
-                </button>
-              }
+              dialogTrigger={<NewCourseButton />}
             />
           </AuthenticatedClientElement>
         </div>
@@ -126,11 +122,7 @@ function CoursesHome(params: CourseProps) {
                       }
                       dialogTitle="Create Course"
                       dialogDescription="Create a new course"
-                      dialogTrigger={
-                        <button>
-                          <NewCourseButton />
-                        </button>
-                      }
+                      dialogTrigger={<NewCourseButton />}
                     />
                   </AuthenticatedClientElement>
                 </div>

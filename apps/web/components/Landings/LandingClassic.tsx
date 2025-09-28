@@ -37,8 +37,8 @@ function LandingClassic({ courses, collections, orgslug, org_id }: LandingClassi
             </AuthenticatedClientElement>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {collections.map((collection: any) => (
-              <div key={collection.collection_id} className="flex flex-col p-3">
+            {collections.map((collection: any, index: number) => (
+              <div key={collection.collection_id || collection.collection_uuid || `collection-${index}`} className="flex flex-col p-3">
                 <CollectionThumbnail
                   collection={collection}
                   orgslug={orgslug}
@@ -106,8 +106,8 @@ function LandingClassic({ courses, collections, orgslug, org_id }: LandingClassi
             </AuthenticatedClientElement>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {courses.map((course: any) => (
-              <div key={course.course_uuid} className="p-3">
+            {courses.map((course: any, index: number) => (
+              <div key={course.course_uuid || `course-${index}`} className="p-3">
                 <CourseThumbnail course={course} orgslug={orgslug} />
               </div>
             ))}

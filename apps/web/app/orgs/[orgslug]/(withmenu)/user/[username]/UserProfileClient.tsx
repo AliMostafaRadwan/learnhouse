@@ -129,19 +129,21 @@ function UserProfileClient({ userData, profile }: UserProfileClientProps) {
 
         {/* Affiliation Logos */}
         <div className="absolute -top-12 right-8 flex items-center gap-4">
-          {profile.sections?.map((section: any) => (
-            section.type === 'affiliation' && section.affiliations?.map((affiliation: any, index: number) => (
-              affiliation.logoUrl && (
-                <div key={index} className="bg-white rounded-lg p-2 shadow-lg border-2 border-white">
-                  <img 
-                    src={affiliation.logoUrl} 
-                    alt={affiliation.name}
-                    className="w-16 h-16 object-contain"
-                    title={affiliation.name}
-                  />
-                </div>
-              )
-            ))
+          {profile.sections?.map((section: any, sectionIndex: number) => (
+            <React.Fragment key={`section-${sectionIndex}`}>
+              {section.type === 'affiliation' && section.affiliations?.map((affiliation: any, index: number) => (
+                affiliation.logoUrl && (
+                  <div key={`${sectionIndex}-${index}`} className="bg-white rounded-lg p-2 shadow-lg border-2 border-white">
+                    <img 
+                      src={affiliation.logoUrl} 
+                      alt={affiliation.name}
+                      className="w-16 h-16 object-contain"
+                      title={affiliation.name}
+                    />
+                  </div>
+                )
+              ))}
+            </React.Fragment>
           ))}
         </div>
 
