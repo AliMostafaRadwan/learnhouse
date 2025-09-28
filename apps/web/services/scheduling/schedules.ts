@@ -136,3 +136,27 @@ export async function toggleScheduleLock(
   const res = await errorHandling(result)
   return res.data
 }
+
+export async function getAllCourseOfferings(
+  orgId: number,
+  access_token: string
+): Promise<CourseOffering[]> {
+  const result = await fetch(
+    `${getAPIUrl()}course-offerings?org_id=${orgId}`,
+    RequestBodyWithAuthHeader('GET', null, null, access_token)
+  )
+  const res = await errorHandling(result)
+  return res.data
+}
+
+export async function getAllTimeSlots(
+  orgId: number,
+  access_token: string
+): Promise<TimeSlot[]> {
+  const result = await fetch(
+    `${getAPIUrl()}time-slots?org_id=${orgId}`,
+    RequestBodyWithAuthHeader('GET', null, null, access_token)
+  )
+  const res = await errorHandling(result)
+  return res.data
+}
